@@ -1,13 +1,20 @@
 'use strict';
 
-import React, { Component } from 'react';
-import { fetch } from 'whatwg-fetch';
-import jsonp from 'fetch-jsonp';
+import Taro from '@tarojs/taro';
+import React, { Component, useEffect, useState } from 'react';
+import { View, Text, Image } from '@tarojs/components';
+
 import styles from './style.js';
 const print = function(value) {
   console.log(value);
 };
-class Page_0 extends Component {
+class Index extends Component {
+  constructor(props) {
+    super(props);
+    let defaultState = {};
+    this.state = Object.assign(defaultState, JSON.parse(JSON.stringify(props)));
+  }
+
   state = {
     data: [
       {
@@ -39,78 +46,46 @@ class Page_0 extends Component {
   isReadCountShow(readCount) {
     return readCount > 300;
   }
-  fetch_example() {
-    fetch('https://jsonplaceholder.typicode.com/todos/1', { method: 'GET', headers: '{"Content-Type":"json"}' })
-      .then(response => response.json())
-      .then((data, error) => {
-        console.log('fetch example: ', data, error);
-        return data;
-      })
-      .catch(e => {
-        console.log('error', e);
-      });
-  }
-  jsonp_example() {
-    jsonp('https://assets.airbnb.com/frontend/search_results.js', { jsonpCallbackFunction: 'search_results', body: {} })
-      .then(response => response.json())
-      .then((data, error) => {
-        console.log('jsonp example: ', data, error);
-        return data;
-      })
-      .catch(e => {
-        console.log('error', e);
-      });
-  }
   render() {
     return (
-      <div style={styles.box}>
+      <View style={styles.box}>
         {this.state.data.map((item, index) => {
           return (
-            <div
-              key={index}
+            <View
               onClick={e => {
                 window.open(item.url, '_blank');
               }}
               data-url={item.url}
               key={item.index}
             >
-              <div style={styles.bd}>
-                <img style={styles.layer} src={'https://img.alicdn.com/tfs/TB1bLoWoYH1gK0jSZFwXXc7aXXa-684-684.png'} />
-                <img style={styles.bg} src={item.coverImage} />
-                <div style={styles.wrap}>
-                  <img
-                    style={styles.riverdinwei}
-                    src={'https://img.alicdn.com/tfs/TB1mtZRoVT7gK0jSZFpXXaTkpXa-28-36.png'}
-                  />
-                  <span style={styles.distance}>距离500m</span>
-                </div>
-              </div>
-              <div style={styles.main}>
-                <span style={styles.title}>{item.title}</span>
-              </div>
-              <div style={styles.ft}>
-                <div style={styles.block}>
-                  <img
-                    style={styles.xianjin}
-                    src={'https://img.alicdn.com/tfs/TB1OvsYoW61gK0jSZFlXXXDKFXa-60-60.png'}
-                  />
-                  <span style={styles.fashionHome}>{item.user.userName}</span>
-                </div>
+              <View style={styles.bd}>
+                <Image style={styles.layer} src={this.state.layer} />
+                <Image style={styles.bg} src={this.state.bg} />
+                <View style={styles.wrap}>
+                  <Image style={styles.riverdinwei} src={this.state.riverdinwei} />
+                  <Text style={styles.distance}>{this.state.distance}</Text>
+                </View>
+              </View>
+              <View style={styles.main}>
+                <Text style={styles.title}>{this.state.title}</Text>
+              </View>
+              <View style={styles.ft}>
+                <View style={styles.block}>
+                  <Image style={styles.xianjin} src={this.state.xianjin} />
+                  <Text style={styles.fashionHome}>{this.state.fashionHome}</Text>
+                </View>
                 {this.isReadCountShow(item.readCount) && (
-                  <div style={styles.group}>
-                    <img
-                      style={styles.favorite}
-                      src={'https://img.alicdn.com/tfs/TB1arwYo7T2gK0jSZFkXXcIQFXa-46-44.png'}
-                    />
-                    <span style={styles.num}>{item.readCount}</span>
-                  </div>
+                  <View style={styles.group}>
+                    <Image style={styles.favorite} src={this.state.favorite} />
+                    <Text style={styles.num}>{this.state.num}</Text>
+                  </View>
                 )}
-              </div>
-            </div>
+              </View>
+            </View>
           );
         })}
-      </div>
+      </View>
     );
   }
 }
-export default Page_0;
+export default Index;
